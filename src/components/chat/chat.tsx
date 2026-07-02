@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
@@ -11,8 +12,25 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
 export function Chat() {
+  const [chatId] = React.useState(() => {
+    if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+      return crypto.randomUUID();
+    }
+    return Math.random().toString(36).substring(7);
+  });
+
   const [input, setInput] = React.useState("");
-  const { messages, status, stop, regenerate, sendMessage } = useChat();
+  
+  const transport = React.useMemo(() => {
+    return new DefaultChatTransport({
+      api: `/api/chat?chatId=${chatId}`
+    });
+  }, [chatId]);
+
+  const { messages, status, stop, regenerate, sendMessage } = useChat({
+    transport,
+    id: chatId,
+  });
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
   
   const isLoading = status === 'submitted' || status === 'streaming';
