@@ -3,6 +3,8 @@ import { auth } from "@clerk/nextjs/server";
 // @ts-ignore
 const pdfParse = require("pdf-parse");
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req: NextRequest) {
   try {
     const { userId } = await auth();
