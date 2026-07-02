@@ -2,7 +2,6 @@ import Link from "next/link"
 import { MessageSquarePlus, MessageSquare, Settings, User } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
 
 export function Sidebar() {
   return (
@@ -17,15 +16,13 @@ export function Sidebar() {
       </div>
 
       <div className="p-3">
-        <Button variant="outline" className="w-full justify-start gap-2 bg-sidebar-accent/50 hover:bg-sidebar-accent border-sidebar-border shadow-sm" asChild>
-          <Link href="/">
-            <MessageSquarePlus className="h-4 w-4" />
-            New Chat
-          </Link>
+        <Button variant="outline" className="w-full justify-start gap-2 bg-sidebar-accent/50 hover:bg-sidebar-accent border-sidebar-border shadow-sm" render={<Link href="/" />}>
+          <MessageSquarePlus className="h-4 w-4" />
+          New Chat
         </Button>
       </div>
 
-      <ScrollArea className="flex-1 px-3">
+      <div className="flex-1 px-3 overflow-y-auto">
         <div className="space-y-1 py-2">
           <p className="px-2 text-xs font-medium text-sidebar-foreground/50 mb-2">Today</p>
           <Button variant="ghost" className="w-full justify-start gap-2 font-normal h-9 px-2 text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
@@ -37,7 +34,7 @@ export function Sidebar() {
             <span className="truncate">React 19 features</span>
           </Button>
         </div>
-      </ScrollArea>
+      </div>
 
       <div className="p-3 border-t border-sidebar-border mt-auto">
         <Button variant="ghost" className="w-full justify-start gap-2 px-2 text-sm text-sidebar-foreground hover:bg-sidebar-accent">
