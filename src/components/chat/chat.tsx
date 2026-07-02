@@ -240,6 +240,7 @@ export function Chat() {
           size="sm" 
           className="absolute top-2 right-4 z-10 gap-2 bg-background/80 backdrop-blur"
           onClick={exportChat}
+          aria-label="Export chat as Markdown"
         >
           <Download className="h-4 w-4" />
           Export
@@ -329,6 +330,7 @@ export function Chat() {
                                       size="icon-xs" 
                                       className="absolute top-2 right-2 opacity-0 group-hover/code:opacity-100 transition-opacity bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-50"
                                       onClick={() => copyToClipboard(String(children))}
+                                      aria-label="Copy code snippet"
                                     >
                                       <Copy className="h-3 w-3" />
                                     </Button>
@@ -349,13 +351,13 @@ export function Chat() {
                     
                     {message.role === 'assistant' && (
                       <div className="flex items-center gap-1 opacity-0 group-hover/message:opacity-100 transition-opacity">
-                        <Button type="button" variant="ghost" size="icon-xs" onClick={() => copyToClipboard(textContent)} className="h-6 w-6">
+                        <Button type="button" variant="ghost" size="icon-xs" onClick={() => copyToClipboard(textContent)} className="h-6 w-6" aria-label="Copy message">
                           <Copy className="h-3 w-3" />
                         </Button>
-                        <Button type="button" variant="ghost" size="icon-xs" onClick={() => toggleSpeech(textContent, message.id)} className="h-6 w-6">
+                        <Button type="button" variant="ghost" size="icon-xs" onClick={() => toggleSpeech(textContent, message.id)} className="h-6 w-6" aria-label={playingMessageId === message.id ? "Stop reading message" : "Read message aloud"}>
                           {playingMessageId === message.id ? <VolumeX className="h-3 w-3" /> : <Volume2 className="h-3 w-3" />}
                         </Button>
-                        <Button type="button" variant="ghost" size="icon-xs" onClick={() => regenerate()} className="h-6 w-6">
+                        <Button type="button" variant="ghost" size="icon-xs" onClick={() => regenerate()} className="h-6 w-6" aria-label="Regenerate message">
                           <RefreshCcw className="h-3 w-3" />
                         </Button>
                       </div>
@@ -404,6 +406,7 @@ export function Chat() {
                     type="button" 
                     onClick={() => removeAttachment(att.id)}
                     className="absolute right-1 top-1/2 -translate-y-1/2 p-0.5 rounded-full hover:bg-background/80 text-muted-foreground hover:text-foreground"
+                    aria-label={`Remove attachment ${att.name}`}
                   >
                     <X className="h-3 w-3" />
                   </button>
@@ -427,6 +430,7 @@ export function Chat() {
               size="icon-sm"
               className="absolute left-2 bottom-3 text-muted-foreground hover:text-foreground z-10 rounded-full"
               onClick={() => fileInputRef.current?.click()}
+              aria-label="Attach file or image"
             >
               <Paperclip className="h-4 w-4" />
             </Button>
@@ -436,6 +440,7 @@ export function Chat() {
               onChange={handleInputChange}
               className="min-h-[60px] w-full resize-none border-0 bg-transparent py-4 pl-12 pr-24 text-sm outline-none focus-visible:ring-0 placeholder:text-muted-foreground shadow-none"
               placeholder="Send a message to Nova AI..."
+              aria-label="Chat input"
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault();
@@ -452,16 +457,17 @@ export function Chat() {
                 className={`rounded-full transition-colors ${isRecording ? 'text-destructive bg-destructive/10 animate-pulse' : 'text-muted-foreground hover:text-foreground'}`}
                 onClick={toggleRecording}
                 title="Voice Input"
+                aria-label={isRecording ? "Stop voice input" : "Start voice input"}
               >
                 {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
               </Button>
               
               {isLoading ? (
-                <Button type="button" size="icon-sm" variant="destructive" className="rounded-full shadow-sm" onClick={stop}>
+                <Button type="button" size="icon-sm" variant="destructive" className="rounded-full shadow-sm" onClick={stop} aria-label="Stop generation">
                   <Square className="h-4 w-4 fill-current" />
                 </Button>
               ) : (
-                <Button type="submit" size="icon-sm" className="rounded-full shadow-sm bg-primary hover:bg-primary/90 text-primary-foreground" disabled={!input.trim() && attachments.length === 0}>
+                <Button type="submit" size="icon-sm" className="rounded-full shadow-sm bg-primary hover:bg-primary/90 text-primary-foreground" disabled={!input.trim() && attachments.length === 0} aria-label="Send message">
                   <ArrowUp className="h-4 w-4" />
                 </Button>
               )}
