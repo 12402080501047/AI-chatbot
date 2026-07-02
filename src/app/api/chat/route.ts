@@ -101,9 +101,22 @@ export async function POST(req: Request) {
       apiKey,
     });
 
+    const coreMessages = messages.map((msg: any) => {
+      if (msg.parts && Array.isArray(msg.parts)) {
+        return {
+          role: msg.role,
+          content: msg.parts.map((p: any) => {
+            if (p.type === 'image') return { type: 'image', image: p.image };
+            return { type: 'text', text: p.text || '' };
+          })
+        };
+      }
+      return { role: msg.role, content: msg.content };
+    });
+
     const result = streamText({
       model: google('gemini-1.5-flash'),
-      messages,
+      messages: coreMessages,
       system: "You are Nova AI, a helpful, friendly, and expert assistant. Format your answers in markdown. Be concise when appropriate.",
       async onFinish({ text }) {
         try {
