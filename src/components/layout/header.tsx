@@ -35,7 +35,7 @@ export function Header() {
           }} />
         </Show>
         <Show when="signed-out">
-          <SignInButton mode="modal">
+          <SignInButton>
             <Button size="sm" className="rounded-full shadow-sm">Sign In</Button>
           </SignInButton>
         </Show>
