@@ -11,6 +11,7 @@ declare global {
 const pool = globalThis.poolGlobal ?? new Pool({ connectionString: process.env.DATABASE_URL })
 if (process.env.NODE_ENV !== 'production') globalThis.poolGlobal = pool
 const adapter = new PrismaPg(pool)
+console.log("IS ADAPTER DEFINED?", !!adapter, adapter);
 
 const prismaClientSingleton = () => {
   return new PrismaClient({
