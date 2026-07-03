@@ -86,7 +86,7 @@ export async function POST(req: Request) {
 
     const lastMessage = messages[messages.length - 1];
     const userMessageContent = lastMessage.parts 
-        ? lastMessage.parts.filter((p: any) => p.type === 'text').map((p: any) => p.text).join('') 
+        ? lastMessage.parts.filter((p: { type: string; text?: string }) => p.type === 'text').map((p: { text?: string }) => p.text).join('') 
         : lastMessage.content;
 
     await prisma.message.create({
@@ -101,11 +101,11 @@ export async function POST(req: Request) {
       apiKey,
     });
 
-    const coreMessages = messages.map((msg: any) => {
+    const coreMessages = messages.map((msg: { role: string; content?: string; parts?: { type: string; text?: string; image?: string }[] }) => {
       if (msg.parts && Array.isArray(msg.parts)) {
         return {
           role: msg.role,
-          content: msg.parts.map((p: any) => {
+          content: msg.parts.map((p) => {
             if (p.type === 'image') return { type: 'image', image: p.image };
             return { type: 'text', text: p.text || '' };
           })
@@ -134,8 +134,9 @@ export async function POST(req: Request) {
     });
 
     return result.toTextStreamResponse();
-  } catch (error: any) {
-    console.error("Error in chat API:", error);
-    return new Response(error.message || "An error occurred during chat processing", { status: 500 });
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Error in chat API:", err);
+    return new Response(err.message || "An error occurred during chat processing", { status: 500 });
   }
 }
