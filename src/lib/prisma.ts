@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
-import { Pool } from 'pg'
+import pg, { type Pool } from 'pg'
+const { Pool: PgPool } = pg
 import { PrismaPg } from '@prisma/adapter-pg'
 
 declare global {
@@ -9,7 +10,7 @@ declare global {
 
 const connectionString = process.env.DATABASE_URL
 
-const pool = globalThis.poolGlobal ?? new Pool({ connectionString })
+const pool = globalThis.poolGlobal ?? new PgPool({ connectionString })
 if (process.env.NODE_ENV !== 'production') globalThis.poolGlobal = pool
 
 const adapter = new PrismaPg(pool)
