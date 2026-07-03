@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ['pg', '@prisma/adapter-pg'],
   allowedDevOrigins: ['10.248.8.224'],
   async headers() {
     return [

@@ -3,7 +3,7 @@ import { streamText } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 export const maxDuration = 30;
 
