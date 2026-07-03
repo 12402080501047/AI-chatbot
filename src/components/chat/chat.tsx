@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
+import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
@@ -42,7 +43,7 @@ export function Chat() {
     });
   }, [chatId]);
 
-  const { messages, status, stop, regenerate, sendMessage } = useChat({
+  const { messages, status, stop, regenerate, sendMessage, error } = useChat({
     transport,
     id: chatId,
   });
@@ -52,7 +53,13 @@ export function Chat() {
 
   React.useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, attachments]);
+  }, [messages, attachments, error]);
+
+  React.useEffect(() => {
+    if (error) {
+      toast.error(error.message || "An error occurred");
+    }
+  }, [error]);
 
   // Cleanup speech synthesis on unmount
   React.useEffect(() => {
@@ -382,6 +389,21 @@ export function Chat() {
                    <div className="h-2 w-2 rounded-full bg-primary/40 animate-bounce" />
                    <div className="h-2 w-2 rounded-full bg-primary/40 animate-bounce" style={{ animationDelay: '0.2s' }} />
                    <div className="h-2 w-2 rounded-full bg-primary/40 animate-bounce" style={{ animationDelay: '0.4s' }} />
+                 </div>
+              </div>
+            )}
+            
+            {error && (
+              <div className="flex gap-4 justify-start">
+                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-destructive/10 ring-1 ring-destructive/20">
+                   <Bot className="h-5 w-5 text-destructive" />
+                 </div>
+                 <div className="px-4 py-3 rounded-2xl bg-destructive/10 border border-destructive/20 text-destructive text-sm max-w-[85%]">
+                   <p className="font-semibold">Error communicating with Nova AI</p>
+                   <p className="mt-1 opacity-90">{error.message}</p>
+                   <Button variant="outline" size="sm" className="mt-2 text-xs" onClick={() => regenerate()}>
+                     Try Again
+                   </Button>
                  </div>
               </div>
             )}
