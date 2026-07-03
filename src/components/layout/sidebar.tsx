@@ -46,7 +46,7 @@ export function Sidebar() {
         </div>
 
         <div className="p-3 space-y-3 shrink-0">
-          <Button variant="outline" className="w-full justify-start gap-2 bg-sidebar-accent/50 hover:bg-sidebar-accent border-sidebar-border shadow-sm" render={<Link href="/" />}>
+          <Button nativeButton={false} variant="outline" className="w-full justify-start gap-2 bg-sidebar-accent/50 hover:bg-sidebar-accent border-sidebar-border shadow-sm" render={<Link href="/" />}>
             <MessageSquarePlus className="h-4 w-4" />
             New Chat
           </Button>
